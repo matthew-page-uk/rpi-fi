@@ -69,7 +69,7 @@ async function list_networks(iface = IFACE) {
             id: parseInt(params[0]),
             ssid: params[1],
             bssid: params[2],
-            state: params[3]
+            state: params[3].replace(/[\[\]']+/g,'')
         });
     });
 
