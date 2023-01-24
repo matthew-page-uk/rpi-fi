@@ -3,20 +3,21 @@ const IFACE = 'wlan0';
 
 run();
 async function run() {
-    // await connect('My SSID', 'MyPassword');
-
-    const networks = await list_networks();
-    console.log(networks);
-
-    // console.log(await scan());
-
+    // await removeAllNetworks();
+    // await removeNetworkBySsid('Wiffy');
+    // await connect('Wiffy', 'P455W0RD!');
+    // await selectNetwork(0);
+    // await save();
+    console.log(await list_networks());
+    console.log(await scan());
     console.log(await state());
 }
 
-async function connect(ssid, psk, iface = IFACE) {
+async function connect(ssid, psk, bssid = null, iface = IFACE) {
     const id = await addNetwork();
     await setNetwork(id, 'ssid', ssid);
     await setNetwork(id, 'psk', psk);
+    if (bssid) await setNetwork(id, 'bssid', bssid);
     await selectNetwork(id);
     await save();
 }
@@ -94,6 +95,22 @@ async function removeNetwork(id, iface = IFACE) {
     return result == 'OK';
 }
 
+async function removeNetworkBySsid(ssid, iface = IFACE) {
+    const result = await list_networks(iface);
+    result.map(network => {
+        if (network?.ssid == ssid) {
+            removeNetwork(network?.id, iface);
+        }
+    });
+}
+
+async function removeAllNetworks(iface = IFACE) {
+    const networks = await list_networks(iface);
+    networks.map(network => {
+        removeNetwork(network?.id, iface);
+    });
+}
+
 /*
 *   private functions
 */
@@ -105,7 +122,6 @@ async function addNetwork(iface = IFACE) {
 
 async function setNetwork(id, name, value, iface = IFACE) {
     let newValue = (typeof value === 'number') ? value :  `\'"${value}"\'`;
-    console.log(`set_network ${parseInt(id)} ${name} ${newValue}`);
     const result = await wpa_cli(iface, `set_network ${parseInt(id)} ${name} ${newValue}`);
     return result == 'OK';
 }
