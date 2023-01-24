@@ -5,12 +5,14 @@ const IFACE = 'wlan0';
 async function test() {
     await removeAllNetworks();
     await removeNetworkBySsid('MySSID');
-    await connect('MySSID', 'PASSWORD');
+    await connect('MySSID', 'P455W0RD!');
     await selectNetwork(0);
     await save();
     console.log(await list_networks());
     console.log(await scan());
     console.log(await state());
+    console.log(await disconnect());
+    console.log(await reconnect());
 }
 
 async function connect(ssid, psk, bssid = null, iface = IFACE) {
@@ -20,6 +22,16 @@ async function connect(ssid, psk, bssid = null, iface = IFACE) {
     if (bssid) await setNetwork(id, 'bssid', bssid);
     await selectNetwork(id);
     await save();
+}
+
+async function disconnect(iface = IFACE) {
+    const result = await wpa_cli(iface, 'disconnect');
+    return result == 'OK';
+}
+
+async function reconnect(iface = IFACE) {
+    const result = await wpa_cli(iface, 'reconnect');
+    return result == 'OK';
 }
 
 async function scan(iface = IFACE) {
@@ -140,6 +152,8 @@ function wpa_cli(iface, command) {
 
 module.exports = {
     connect,
+    disconnect,
+    reconnect,
     scan,
     list_networks,
     save,
