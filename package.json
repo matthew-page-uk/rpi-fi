@@ -1,7 +1,7 @@
 {
   "name": "rpi-fi",
   "version": "1.0.0",
-  "description": "",
+  "description": "expose wpa_cli function calls via Node",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/matthew-page-bbc/rpi-fi.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["wpa_cli", "wifi", "raspberry", "pi"],
+  "author": "Matthew Page",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/matthew-page-bbc/rpi-fi/issues"
