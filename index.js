@@ -156,6 +156,7 @@ module.exports = {
     reconnect,
     scan,
     list_networks,
+    state,
     save,
     reconfigure,
     selectNetwork,
