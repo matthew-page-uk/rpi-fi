@@ -1,13 +1,13 @@
 const { exec } = require('child_process');
 const IFACE = 'wlan0';
 
-run();
-async function run() {
-    // await removeAllNetworks();
-    // await removeNetworkBySsid('Wiffy');
-    // await connect('Wiffy', 'P455W0RD!');
-    // await selectNetwork(0);
-    // await save();
+// test();
+async function test() {
+    await removeAllNetworks();
+    await removeNetworkBySsid('MySSID');
+    await connect('MySSID', 'PASSWORD');
+    await selectNetwork(0);
+    await save();
     console.log(await list_networks());
     console.log(await scan());
     console.log(await state());
@@ -146,4 +146,6 @@ module.exports = {
     reconfigure,
     selectNetwork,
     removeNetwork,
+    removeNetworkBySsid,
+    removeAllNetworks
 }
