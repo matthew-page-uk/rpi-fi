@@ -3,14 +3,14 @@ const IFACE = 'wlan0';
 
 run();
 async function run() {
-    await connect('My SSID', 'MyPassword');
+    // await connect('My SSID', 'MyPassword');
 
     const networks = await list_networks();
     console.log(networks);
 
-    await save()
+    // console.log(await scan());
 
-    console.log(await scan());
+    console.log(await state());
 }
 
 async function connect(ssid, psk, iface = IFACE) {
@@ -63,6 +63,17 @@ async function list_networks(iface = IFACE) {
     return networks;
 }
 
+async function state(iface = IFACE) {
+    const stateObj = {};
+    const result = await wpa_cli(iface, 'status');
+    let output = result.split('\n');
+    output.map((line) => {
+        const params = line.split('=');
+        stateObj[params[0]] = params[1];
+    });
+    return stateObj;
+}
+
 async function save(iface = IFACE) {
     const result = await wpa_cli(iface, 'save_config');
     return result == 'OK';
@@ -82,6 +93,10 @@ async function removeNetwork(id, iface = IFACE) {
     const result = await wpa_cli(iface, `remove_network ${parseInt(id)}`);
     return result == 'OK';
 }
+
+/*
+*   private functions
+*/
 
 async function addNetwork(iface = IFACE) {
     const result = await wpa_cli(iface, 'add_network');
@@ -105,4 +120,14 @@ function wpa_cli(iface, command) {
             resolve(output);
         });
     });
+}
+
+module.exports = {
+    connect,
+    scan,
+    list_networks,
+    save,
+    reconfigure,
+    selectNetwork,
+    removeNetwork,
 }
