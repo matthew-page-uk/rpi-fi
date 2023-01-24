@@ -8,14 +8,14 @@ npm install rpi-fi
 
 # usage:
 
-const { connect, list_networks, scan } = require('rpi-fi');
+    const { connect, list_networks, scan } = require('rpi-fi');
 
-run();
+    run();
 
-async function run() {
-    console.log(await scan());
+    async function run() {
+        console.log(await scan());
     
-    await connect('MySSID', 'MyPassord');
+        await connect('MySSID', 'MyPassord');
 
-    console.log(await list_networks());
-}
+        console.log(await list_networks());
+    }
